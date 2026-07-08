@@ -1,0 +1,16 @@
+name: Trigger Azure DevOps Pipeline
+'on':
+  push:
+    branches:
+    - main
+jobs:
+  trigger-ado-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Queue Azure DevOps pipeline run
+      env:
+        ADO_PAT: ${{ secrets.ADO_PAT }}
+      run: 'curl -sS -f -u ":$ADO_PAT" -X POST "https://dev.azure.com/maheshbabuhakeem/maheshbabu_hakeem/_apis/pipelines/7/runs?api-version=7.1-preview.1"
+        -H "Content-Type: application/json" -d ''{"resources": {"repositories": {"self":
+        {"refName": "refs/heads/main"}}}}'''
